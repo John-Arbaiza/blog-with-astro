@@ -1,0 +1,58 @@
+<div id="hero">
+	<h1>Bienvenido a <span class="text-gradient">DevFundamentals</span></h1>
+	<p class="subtitle">
+		Un espacio para explorar la tecnología moderna: desarrollo web, Docker, bases de datos, Linux y más. Creado sin plantillas, con diseño puro y la velocidad de Astro.
+	</p>
+</div>
+
+
+<style>
+	#hero {
+		text-align: center;
+		padding: 4rem 0 6rem;
+		animation: fadeUp 0.8s ease-out forwards;
+	}
+
+	h1 {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+		font-weight: 600;
+	}
+
+	.text-gradient {
+		background-image: linear-gradient(45deg, var(--accent-color), #818cf8);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+
+	.subtitle {
+		font-size: 1.25rem;
+		color: var( --text-primary);
+		max-width: 600px;
+		margin: 0 auto 2.5rem;
+		font-weight: 400;
+	}
+
+	@keyframes fadeUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	
+	@media (max-width: 600px) {
+		h1 {
+			font-size: 2.2rem;
+		}
+		.actions {
+			flex-direction: column;
+		}
+	}
+
+</style>

@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+  :root {
+    /* Fondo */
+    --bg-color: #05030f;
+    --bg-glow: radial-gradient(ellipse 50% 50% at 0% 0%, rgba(140, 30, 220, 0.5) 0%, transparent 100%);
+    --surface-color: #0e0a1f;   /* tarjetas, nav, bloques */
+    --surface-hover: #16102e;   /* hover de tarjetas */
+
+    /* Texto */
+    --text-primary: #f0eafa;    /* blanco cálido con toque violeta */
+    --text-secondary: #a89bc2;  /* texto secundario, fechas, meta */
+    --text-muted: #5c4f78;      /* placeholders, deshabilitados */
+
+    /* Acento */
+    --accent-color: #a855f7;         /* púrpura principal */
+    --accent-light: #c084fc;         /* hover de links */
+    --accent-glow: rgba(168, 85, 247, 0.35); /* sombras y brillos */
+
+    /* Bordes */
+    --border-color: #2d1f4e;    /* bordes sutiles */
+    --border-hover: #4c3575;    /* bordes al hacer hover */
+
+    /* Tipografía */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+  }
