@@ -1,0 +1,154 @@
+---
+const topics = [
+    { name: "Docker",         count: 0, icon: "D",  href: "#", color: "#0ea5e9" },
+    { name: "Linux",          count: 0, icon: "L",  href: "#", color: "#22c55e" },
+    { name: "Bases de datos", count: 0, icon: "BD", href: "#", color: "#f59e0b" },
+    { name: "Web",            count: 0, icon: "W",  href: "#", color: "#a855f7" },
+    { name: "DevOps",         count: 0, icon: "DO", href: "#", color: "#ec4899" },
+];
+
+---
+<section class="topics-section">
+    <div class="section-header">
+        <p class="section-label">Explora por tema</p>
+        <h2>¿Qué quieres aprender?</h2>
+        <p class="section-sub">Cada categoría ordenada de básico a avanzado.</p>
+    </div>
+
+    <div class="topics-grid">
+        {topics.map((topic) => (
+        <a href={topic.href} class="topic-card">
+            <span
+            class="topic-icon"
+            style={`background: ${topic.color}1a; color: ${topic.color}; border-color: ${topic.color}30`}
+            >
+            {topic.icon}
+            </span>
+            <span class="topic-name">{topic.name}</span>
+            <span class="topic-count">{topic.count} {topic.count === 1 ? "artículo" : "artículos"}</span>
+            <span class="topic-arrow">→</span>
+        </a>
+        ))}
+
+        <!-- Tarjeta "próximamente" -->
+        <div class="topic-card topic-coming">
+        <span class="topic-icon" style="background: var(--surface-color); color: var(--text-muted); border-color: var(--border-color)">+</span>
+        <span class="topic-name" style="color: var(--text-muted)">Próximamente</span>
+        <span class="topic-count">más temas</span>
+        </div>
+    </div>
+</section>
+
+<style>
+    .topics-section {
+        padding: 3.5rem 1rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+        font-weight: 800;
+    }
+    .section-header h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .section-sub {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+    }
+
+    .topics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .topic-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 1.1rem;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        text-decoration: none;
+        transition: border-color 0.2s, background 0.2s, transform 0.15s;
+        position: relative;
+        animation: fadeUp 0.8s ease-out forwards;
+    }
+    .topic-card:hover {
+        border-color: var(--border-hover);
+        background: var(--surface-hover);
+        transform: translateY(-2px);
+    }
+    .topic-coming {
+        cursor: default;
+        opacity: 0.5;
+        border-style: dashed;
+    }
+    .topic-coming:hover {
+        transform: none;
+        background: var(--surface-color);
+        border-color: var(--border-color);
+    }
+    .topic-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+    .topic-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+    .topic-count {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+    .topic-arrow {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        opacity: 0;
+        transition: opacity 0.15s, transform 0.15s;
+    }
+    .topic-card:hover .topic-arrow {
+        opacity: 1;
+        transform: translateX(2px);
+    }
+
+    @keyframes fadeUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

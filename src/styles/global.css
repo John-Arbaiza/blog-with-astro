@@ -4,6 +4,7 @@
     /* Fondo */
     --bg-color: #05030f;
     --bg-glow: radial-gradient(ellipse 50% 50% at 0% 0%, rgba(140, 30, 220, 0.5) 0%, transparent 100%);
+    --bg-morado: rgba(129,140,248,0.5);
     --surface-color: #0e0a1f;   /* tarjetas, nav, bloques */
     --surface-hover: #16102e;   /* hover de tarjetas */
 

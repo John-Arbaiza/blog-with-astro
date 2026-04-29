@@ -1,0 +1,93 @@
+---
+export interface Props{
+    posts: number;
+    topics: number;
+}
+
+const {posts, topics} = Astro.props;
+
+const stats = [
+    { num: posts,    label: "Artículos publicados" },
+    { num: topics,   label: "Temas cubiertos"},
+    { num: "2026",   label: "Año de inicio" },
+]
+---
+<section class="stats">
+        {stats.map((items) => (
+            <div class="stat-card">
+            <span class="stat-num">{items.num}</span>
+            <span class="stat-label">{items.label}</span>
+            </div>
+        ))}
+</section>
+
+<style>
+    .stats{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .stat-card{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 1.75rem 1rem;
+        background: #0e0a1f;                          /* --surface-color hardcoded para asegurar contraste */
+        border: 1px solid #2d1f4e;                    /* --border-color */
+        border-radius: 14px;
+        transition: border-color 0.2s, transform 0.2s;
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.8s ease-out forwards;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+    /* Brillo sutil en la esquina superior */
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), transparent);
+    }   
+
+    .stat-card:hover {
+        border-color: #4c3575;
+        transform: translateY(-3px);
+    }
+
+    .stat-num {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        line-height: 1;
+        letter-spacing: -1px;
+    }
+
+    .stat-label {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    @keyframes fadeUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+    @media (max-width: 480px) {
+        .stats-wrapper { grid-template-columns: 1fr; max-width: 280px; }
+    }
+</style>
