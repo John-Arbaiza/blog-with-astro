@@ -1,0 +1,194 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer-glass">
+  <div class="glass-glow"></div>
+  <div class="footer-container">
+
+    <!-- Brand -->
+    <div class="footer-brand">
+
+      <div>
+        <a href="/" class="footer-logo">
+          Dev<span>Fundamentals</span>
+        </a>
+        <p>
+          Un espacio para aprender tecnología moderna con ejemplos reales.
+          Desarrollo web, Docker, Linux y más.
+        </p>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="footer-grid">
+      <div>
+        <h3>Secciones</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Social</h3>
+        <ul>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    © {year} DevFundamentals · Hecho con
+      <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
+  </div>
+</footer>
+
+<style>
+
+  .footer-glass {
+    background: rgba(15, 23, 42, 0.35); /* más transparente */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+
+      background:
+          radial-gradient(circle at top left, rgba(13, 27, 161, 0.312), transparent 12%),
+          radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.10), transparent 12%);
+
+      opacity: 1;
+  }
+
+  .footer-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 2.5rem;
+  }
+
+  .footer-logo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+  .footer-logo span { color: var(--accent-color); }
+
+  /* Brand */
+  .footer-brand {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #7c3aed, #818cf8);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: white;
+    font-size: 12px;
+  }
+
+  .footer-brand h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #e2e8f0;
+    font-weight: 800;
+  }
+
+  .footer-brand h2 span {
+    color: #818cf8;
+  }
+
+  .footer-brand p {
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+
+  /* Grid links */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .footer-grid h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: #e2e8f0;
+  }
+
+  .footer-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-grid li {
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-grid a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  .footer-grid a:hover {
+    color: #818cf8;
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
