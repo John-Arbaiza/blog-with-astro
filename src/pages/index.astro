@@ -2,20 +2,27 @@
 import Layout from '../layouts/Layout.astro';
 import Welcome from '../components/Welcome.astro';
 import Stats from '../components/Stats.astro';
-import { getCollection } from 'astro:content';
 import TopicGrid from '../components/TopicGrid.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import RecentPosts from '../components/RecentPosts.astro';
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allPosts: CollectionEntry<'blog'>[] =
+await getCollection('blog', (entry: CollectionEntry<'blog'>) => !entry.data.draft);
 
-// const recentPosts = allPosts
-//   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-//   .slice(0, 3);
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 
-const allTags = new Set(allPosts.flatMap((p) => p.data.tags));
+
+const allTags = new Set(
+	allPosts.flatMap((p) => p.data.tags)
+);
 ---
 
 <Layout title="DevFundamentals | Inicio">
 	<Welcome />
 	<Stats posts={allPosts.length} topics={allTags.size} />
 	<TopicGrid />
+	<RecentPosts posts={recentPosts} />
 </Layout>
