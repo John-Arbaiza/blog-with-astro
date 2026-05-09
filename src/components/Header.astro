@@ -4,105 +4,152 @@ const navItems = [
     { href: "/blog", label: "Blog" },
     { href: "/about", label: "About" },
 ];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+    if (href === "/") return currentPath === "/";
+    return currentPath.startsWith(href);
+}
 ---
 
-<header class="site-header">
-    <nav class="max-w-[900px] mx-auto px-6 py-4 flex items-center justify-between">
+<header class="sticky top-0 z-[100] bg-slate-900/45 backdrop-blur-md border-b border-white/10">
+    <nav class="max-w-[900px] mx-auto px-6 py-4 flex items-center justify-between relative">
 
-        <a href="/" class="logo">
-            Dev<span>Fundamentals</span>
+        <a href="/" class="flex items-center gap-2.5 no-underline" aria-label="DevFundamentals - Inicio">
+            <span class="w-7 h-7 bg-gradient-to-br from-violet-600 to-indigo-400 rounded-md flex items-center justify-center text-[11px] font-extrabold text-white shrink-0">
+                DF
+            </span>
+            <span class="text-2xl font-extrabold tracking-tight text-slate-100">
+                Dev<span class="text-indigo-400" style="text-shadow: 0 0 15px rgba(129,140,248,0.5)">Fundamentals</span>
+            </span>
         </a>
 
-        <!-- BOTÓN MOBILE -->
-        <button
-            id="menuToggle"
-            class="md:hidden text-2xl text-slate-200"
-            aria-label="Toggle menu"
-        >
-            &#9776;
-        </button>
-
-        <!-- NAV LINKS -->
-        <ul
-        id="navLinks"
-        class="links hidden md:flex"
-        >
+        <!-- Links desktop -->
+        <ul id="navLinks" class="hidden md:flex items-center gap-0.5 list-none m-0 p-0" role="list">
             {navItems.map((item) => (
-                <li>
-                <a href={item.href}>{item.label}</a>
+                <li
+                    class:list={[
+                        "px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 cursor-pointer",
+                        isActive(item.href)
+                            ? "text-slate-100 bg-white/10"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
+                    ]}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                    <a href={item.href}>{item.label}</a>
                 </li>
             ))}
         </ul>
+
+        <!-- Botón mobile -->
+        <button
+            id="menuToggle"
+            class="md:hidden flex items-center justify-center w-9 h-9 bg-transparent border border-white/10 rounded-md cursor-pointer p-0"
+            aria-label="Abrir menú"
+            aria-expanded="false"
+            aria-controls="navLinks"
+        >
+            <span class="menu-icon" aria-hidden="true"></span>
+        </button>
 
     </nav>
 </header>
 
 <script>
-    const toggle = document.getElementById("menuToggle");
-    const nav = document.getElementById("navLinks");
+    const toggle = document.getElementById("menuToggle") as HTMLButtonElement;
+    const nav    = document.getElementById("navLinks") as HTMLUListElement;
 
-    if (toggle && nav) {
-        toggle.addEventListener("click", () => {
-            nav.classList.toggle("hidden");
-        });
+    if (!toggle || !nav) throw new Error("Header: elementos no encontrados");
+
+    function openMenu() {
+        nav.classList.remove("hidden");
+        nav.classList.add("mobile-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Cerrar menú");
     }
+
+    function closeMenu() {
+        nav.classList.add("hidden");
+        nav.classList.remove("mobile-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Abrir menú");
+    }
+
+    toggle.addEventListener("click", () => {
+        nav.classList.contains("mobile-open") ? closeMenu() : openMenu();
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!toggle.contains(e.target as Node) && !nav.contains(e.target as Node)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
+    });
+
+    nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+    });
 </script>
 
 <style>
-    /* Header Styles */
-    .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: rgba(15, 23, 42, 0.45);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .logo {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--text-color);
-        text-decoration: none;
-        letter-spacing: -0.5px;
-    }
-
-    .logo span {
-        color: var(--accent-color);
-        text-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .links {
-        align-items: center;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        gap: 2rem;
-    }
-
-    .links li a {
+    #navLinks li a {
         color: #cbd5e1;
         text-decoration: none;
-        font-weight: 800;
+        font-weight: 700;
         transition: color 0.2s ease;
     }
-
-    .links li a:hover {
-        color: var(--accent-color);
+    /* Hamburger icon */
+    .menu-icon,
+    .menu-icon::before,
+    .menu-icon::after {
+        display: block;
+        width: 16px;
+        height: 1.5px;
+        background: #e2e8f0;
+        border-radius: 2px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
     }
-
-/* Responsive*/
-@media (max-width: 768px) {
-    .links {
+    .menu-icon { position: relative; }
+    .menu-icon::before,
+    .menu-icon::after {
+        content: "";
         position: absolute;
-        top: 70px;
-        right: 1.5rem;
-        background: rgba(15, 23, 42, 0.95);
-        flex-direction: column;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        border: 1px solid var(--border-color);
+        left: 0;
     }
-}
+    .menu-icon::before { top: -5px; }
+    .menu-icon::after  { top:  5px; }
+
+    [aria-expanded="true"] .menu-icon { background: transparent; }
+    [aria-expanded="true"] .menu-icon::before {
+        transform: translateY(5px) rotate(45deg);
+    }
+    [aria-expanded="true"] .menu-icon::after {
+        transform: translateY(-5px) rotate(-45deg);
+    }
+
+    /* Menú mobile desplegado */
+    #navLinks.mobile-open {
+        display: flex !important;
+        position: absolute;
+        top: 58px;
+        right: 1rem;
+        left: 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        background: rgba(15, 23, 42, 0.97);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 0.5rem;
+        gap: 4px;
+    }
+
+    #navLinks.mobile-open li {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
 </style>

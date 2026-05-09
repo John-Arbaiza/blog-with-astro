@@ -4,6 +4,7 @@
     /* Fondo */
     --bg-color: #05030f;
     --bg-glow: radial-gradient(ellipse 50% 50% at 0% 0%, rgba(140, 30, 220, 0.5) 0%, transparent 100%);
+    --bg-morado: rgba(129,140,248,0.5);
     --surface-color: #0e0a1f;   /* tarjetas, nav, bloques */
     --surface-hover: #16102e;   /* hover de tarjetas */
 
@@ -17,18 +18,43 @@
     --accent-light: #c084fc;         /* hover de links */
     --accent-glow: rgba(168, 85, 247, 0.35); /* sombras y brillos */
 
+    /* Acento secundario */
+    --teal-color: #2dd4bf;
+    --teal-light: #5eead4;
+    --teal-dim: rgba(45, 212, 191, 0.12);
+
     /* Bordes */
     --border-color: #2d1f4e;    /* bordes sutiles */
     --border-hover: #4c3575;    /* bordes al hacer hover */
+
+    /* Semánticos (nuevo) */
+    --color-success: #4ade80;
+    --color-success-dim: rgba(74, 222, 128, 0.12);
+    --color-error: #f87171;
+    --color-error-dim: rgba(248, 113, 113, 0.12);
+
 
     /* Tipografía */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
-  body {
-    background-color: var(--bg-color);
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+  
+body {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
+    background-color: var(--bg-color);
     color: var(--text-primary);
     font-family: var(--font-sans);
-  }
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Animación global reutilizable ── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

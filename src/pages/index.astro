@@ -1,13 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Welcome from '../components/Welcome.astro';
+import Stats from '../components/Stats.astro';
+import TopicGrid from '../components/TopicGrid.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import RecentPosts from '../components/RecentPosts.astro';
+
+const allPosts: CollectionEntry<'blog'>[] =
+await getCollection('blog', (entry: CollectionEntry<'blog'>) => !entry.data.draft);
+
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const allTags = new Set(
+	allPosts.flatMap((p) => p.data.tags)
+);
 ---
 
 <Layout title="DevFundamentals | Inicio">
 	<Welcome />
+	<Stats posts={allPosts.length} topics={allTags.size} />
+	<TopicGrid />
+	<RecentPosts posts={recentPosts} />
 </Layout>
