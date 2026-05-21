@@ -9,7 +9,10 @@ const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
 
 const formattedDate = pubDate.toLocaleDateString('es-ES', {
-    year: 'numeric', month: 'short', day: 'numeric',
+    timeZone: 'UTC',
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric',
 });
 
 // Ciclo de colores para los tags

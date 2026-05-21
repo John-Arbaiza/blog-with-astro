@@ -1,0 +1,239 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+    // Obtener todos los tags únicos
+    const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags))];
+
+    return allTags.map((tag) => ({
+        params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+        props: {
+            tag,
+            posts: allPosts.filter((post) =>
+                post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
+            ),
+        },
+    }));
+}
+
+const topicColors: Record<string, string> = {
+    docker:           "#0ea5e9",
+    linux:            "#22c55e",
+    "bases-de-datos": "#f59e0b",
+    web:              "#a855f7",
+    devops:           "#ec4899",
+};
+
+const { tag, posts } = Astro.props;
+
+const tagSlug = tag.toLowerCase().replace(/\s+/g, '-');
+const color   = topicColors[tagSlug] ?? "var(--accent-color)";
+
+function formatDate(date: Date) {
+    return date.toLocaleDateString('es-ES', {
+        timeZone: 'UTC', 
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+---
+
+<Layout title={`Artículos sobre ${tag}`}>
+    <section class="tag-page">
+
+        <!-- Cabecera -->
+        <div class="tag-header" style={`--topic-color: ${color}`}>
+            <a href="/" class="back-link">← Volver al inicio</a>
+            <div class="tag-badge">
+                <span class="tag-dot"></span>
+                {tag}
+            </div>
+            <h1>Artículos sobre <span class="highlight">{tag}</span></h1>
+            <p class="tag-meta">{posts.length} {posts.length === 1 ? 'artículo publicado' : 'artículos publicados'}</p>
+        </div>
+
+        <!-- Lista de posts -->
+        {posts.length === 0 ? (
+            <div class="empty-state">
+                <span class="empty-icon">📭</span>
+                <p>Aún no hay artículos en este tema.</p>
+                <p class="empty-sub">Vuelve pronto, estamos trabajando en ello.</p>
+            </div>
+        ) : (
+            <ul class="posts-list">
+                {posts.map((post, i) => (
+                    <li class="post-card" style={`animation-delay: ${i * 60}ms`}>
+                        <a href={`/blog/${post.id}`} class="post-link">
+                            <div class="post-top">
+                                <span class="post-date">{formatDate(post.data.pubDate)}</span>
+                                <span class="post-arrow">→</span>
+                            </div>
+                            <h2 class="post-title">{post.data.title}</h2>
+                            <p class="post-desc">{post.data.description}</p>
+                            <div class="post-tags">
+                                {post.data.tags.map((t) => (
+                                    <span class="post-tag">{t}</span>
+                                ))}
+                            </div>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        )}
+    </section>
+</Layout>
+
+<style>
+    .tag-page {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 3rem 1rem 5rem;
+    }
+
+    /* ── Cabecera ── */
+    .back-link {
+        display: inline-block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent-light); }
+
+    .tag-header {
+        margin-bottom: 2.5rem;
+        animation: fadeUp 0.6s ease-out both;
+    }
+
+    .tag-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--topic-color);
+        background: color-mix(in srgb, var(--topic-color) 12%, transparent);
+        border: 1px solid color-mix(in srgb, var(--topic-color) 25%, transparent);
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+    }
+    .tag-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--topic-color);
+    }
+
+    .tag-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.4rem;
+        line-height: 1.2;
+    }
+    .highlight { color: var(--topic-color); }
+
+    .tag-meta {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    /* ── Lista ── */
+    .posts-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-card {
+        animation: fadeUp 0.5s ease-out both;
+    }
+
+    .post-link {
+        display: block;
+        padding: 1.25rem 1.4rem;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        text-decoration: none;
+        transition: border-color 0.2s, background 0.2s, transform 0.15s;
+        position: relative;
+    }
+    .post-link:hover {
+        border-color: var(--border-hover);
+        background: var(--surface-hover);
+        transform: translateY(-2px);
+    }
+    .post-link:hover .post-arrow {
+        opacity: 1;
+        transform: translateX(3px);
+    }
+
+    .post-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .post-date {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+    .post-arrow {
+        font-size: 0.9rem;
+        color: var(--accent-color);
+        opacity: 0;
+        transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .post-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.4rem;
+        line-height: 1.4;
+    }
+    .post-desc {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 0.85rem;
+    }
+
+    .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .post-tag {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        background: var(--teal-dim);
+        color: var(--teal-light);
+        border: 1px solid rgba(45, 212, 191, 0.2);
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 1rem;
+        color: var(--text-muted);
+        animation: fadeUp 0.6s ease-out both;
+    }
+    .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+    .empty-sub  { font-size: 0.85rem; margin-top: 0.25rem; }
+</style>

@@ -1,12 +1,27 @@
 ---
-const topics = [
-    { name: "Docker",         count: 0, icon: "D",  href: "#", color: "#0ea5e9" },
-    { name: "Linux",          count: 0, icon: "L",  href: "#", color: "#22c55e" },
-    { name: "Bases de datos", count: 0, icon: "BD", href: "#", color: "#f59e0b" },
-    { name: "Web",            count: 0, icon: "W",  href: "#", color: "#a855f7" },
-    { name: "DevOps",         count: 0, icon: "DO", href: "#", color: "#ec4899" },
+import { getCollection } from 'astro:content';
+
+// Obtener todos los posts publicados
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// Definir los temas con sus metadatos visuales
+const topicsMeta = [
+    { name: "Docker",         icon: "D",  href: "/tags/docker",    color: "#0ea5e9" },
+    { name: "Linux",          icon: "L",  href: "/tags/linux",     color: "#22c55e" },
+    { name: "Bases de datos", icon: "BD", href: "/tags/bases-de-datos", color: "#f59e0b" },
+    { name: "Web",            icon: "W",  href: "/tags/web",       color: "#a855f7" },
+    { name: "DevOps",         icon: "DO", href: "/tags/devops",    color: "#ec4899" },
 ];
 
+// Calcular el conteo por tag automáticamente
+const topics = topicsMeta.map((topic) => ({
+    ...topic,
+    count: allPosts.filter((post) =>
+        post.data.tags.some(
+            (tag) => tag.toLowerCase() === topic.name.toLowerCase()
+        )
+    ).length,
+}));
 ---
 <section class="topics-section">
     <div class="section-header">
